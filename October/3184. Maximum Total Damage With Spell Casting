@@ -1,0 +1,27 @@
+import java.util.*;
+
+public class Solution {
+    public long maximumTotalDamage(int[] power) {
+        Map<Integer, Long> map = new HashMap<>();
+        
+        for (int p : power) map.put(p, map.getOrDefault(p, 0L) + (long) p);
+        
+        Integer[] keys = map.keySet().toArray(new Integer[0]);
+        Arrays.sort(keys);
+        int m = keys.length;
+        long[] sums = new long[m];
+        
+        for (int i = 0; i < m; i++) sums[i] = map.get(keys[i]);
+        
+        long[] dp = new long[m];
+        int k = -1;
+        
+        for (int i = 0; i < m; i++) {
+            while (k + 1 < i && keys[k + 1] <= keys[i] - 3) k++;
+            long take = sums[i] + (k == -1 ? 0L : dp[k]);
+            long notake = (i == 0 ? 0L : dp[i - 1]);
+            dp[i] = Math.max(take, notake);
+        }
+        return m == 0 ? 0L : dp[m - 1];
+    }
+}
