@@ -1,0 +1,20 @@
+import java.util.*;
+
+class Solution {
+    public List<String> removeAnagrams(String[] words) {
+        List<String> res = new ArrayList<>();
+        if (words == null || words.length == 0) return res;
+
+        String prevSorted = null;
+        for (String w : words) {
+            char[] ca = w.toCharArray();
+            Arrays.sort(ca);
+            String sorted = new String(ca);
+            if (!sorted.equals(prevSorted)) {
+                res.add(w);
+                prevSorted = sorted;
+            }
+        }
+        return res;
+    }
+}
