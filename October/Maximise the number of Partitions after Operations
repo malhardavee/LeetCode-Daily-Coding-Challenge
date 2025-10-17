@@ -1,0 +1,44 @@
+import java.util.*;
+
+class Solution {
+    Map<String, Integer> memo = new HashMap<>();
+
+    public int maxPartitionsAfterOperations(String s, int k) {
+        return dfs(s.toCharArray(), 0, false, 0, k);
+    }
+
+    private int dfs(char[] s, int idx, boolean changed, int mask, int k) {
+        if (idx == s.length) return 1;
+        String key = idx + "," + changed + "," + mask;
+        if (memo.containsKey(key)) return memo.get(key);
+
+        int cur = s[idx] - 'a';
+        int res = 0;
+
+        // Option 1: keep same character
+        int newMask = mask | (1 << cur);
+        int add = 0;
+        if (Integer.bitCount(newMask) > k) {
+            add = 1;
+            newMask = 1 << cur;
+        }
+        res = Math.max(res, add + dfs(s, idx + 1, changed, newMask, k));
+
+        // Option 2: change this character (only once)
+        if (!changed) {
+            for (int c = 0; c < 26; c++) {
+                if (c == cur) continue;
+                int newMask2 = mask | (1 << c);
+                int add2 = 0;
+                if (Integer.bitCount(newMask2) > k) {
+                    add2 = 1;
+                    newMask2 = 1 << c;
+                }
+                res = Math.max(res, add2 + dfs(s, idx + 1, true, newMask2, k));
+            }
+        }
+
+        memo.put(key, res);
+        return res;
+    }
+}
