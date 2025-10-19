@@ -1,0 +1,37 @@
+import java.util.*;
+
+class Solution {
+    public String findLexSmallestString(String s, int a, int b) {
+        Set<String> visited = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
+        String smallest = s;
+
+        queue.add(s);
+        visited.add(s);
+
+        while (!queue.isEmpty()) {
+            String curr = queue.poll();
+
+            // Update smallest
+            if (curr.compareTo(smallest) < 0) {
+                smallest = curr;
+            }
+
+            // Operation 1: Add a to all digits at odd indices
+            char[] arr = curr.toCharArray();
+            for (int i = 1; i < arr.length; i += 2) {
+                arr[i] = (char) ((arr[i] - '0' + a) % 10 + '0');
+            }
+            String addA = new String(arr);
+
+            // Operation 2: Rotate by b
+            String rotateB = curr.substring(curr.length() - b) + curr.substring(0, curr.length() - b);
+
+            // Push new states if not visited
+            if (visited.add(addA)) queue.add(addA);
+            if (visited.add(rotateB)) queue.add(rotateB);
+        }
+
+        return smallest;
+    }
+}
