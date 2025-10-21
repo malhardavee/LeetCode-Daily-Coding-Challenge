@@ -1,0 +1,40 @@
+import java.util.*;
+
+class Solution {
+    public int maxFrequency(int[] nums, int k, int numOperations) {
+        int ans = 1;
+        int adjustable = 0;
+
+        Map<Integer, Integer> count = new HashMap<>();
+        TreeMap<Integer, Integer> diff = new TreeMap<>();
+        Set<Integer> candidates = new TreeSet<>();
+
+        for (int num : nums) {
+            count.merge(num, 1, Integer::sum);
+
+            diff.merge(num - k, 1, Integer::sum);
+            diff.merge(num + k + 1, -1, Integer::sum);
+
+            candidates.add(num);
+            candidates.add(num - k);
+            candidates.add(num + k + 1);
+        }
+
+        for (int pos : candidates) {
+            // Update how many elements can reach this pos
+            adjustable += diff.getOrDefault(pos, 0);
+
+            // how many elements are already exactly equal to pos
+            int cntAtPos = count.getOrDefault(pos, 0);
+            int canConvert = adjustable - cntAtPos;
+            if (canConvert < 0) {
+                canConvert = 0;
+            }
+            int frequencyAtPos = cntAtPos + Math.min(numOperations, canConvert);
+
+            ans = Math.max(ans, frequencyAtPos);
+        }
+
+        return ans;
+    }
+}
