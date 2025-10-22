@@ -1,0 +1,55 @@
+import java.util.*;
+
+class Solution {
+    public int maxFrequency(int[] nums, int k, int numOperations) {
+        int n = nums.length;
+        // frequency of exact original values
+        Map<Long, Integer> count = new HashMap<>(n * 2);
+        // collect candidate points
+        TreeSet<Long> candidates = new TreeSet<>();
+
+        // events for difference array: pair (pos -> delta)
+        ArrayList<long[]> events = new ArrayList<>(n * 2);
+
+        for (int x : nums) {
+            long val = x;
+            count.put(val, count.getOrDefault(val, 0) + 1);
+
+            long start = val - (long) k;
+            long end = val + (long) k; // inclusive interval
+
+            events.add(new long[] { start, 1L });
+            events.add(new long[] { end + 1L, -1L }); // end+1 for difference array
+
+            // candidate values per hint
+            candidates.add(start);
+            candidates.add(val);
+            candidates.add(end);
+        }
+
+        // sort events by position
+        events.sort(Comparator.comparingLong(a -> a[0]));
+
+        // sweep through candidates (sorted)
+        int ans = 1;
+        long running = 0L;
+        int ei = 0;
+        int m = events.size();
+
+        for (long cand : candidates) {
+            // advance events up to and including cand
+            while (ei < m && events.get(ei)[0] <= cand) {
+                running += events.get(ei)[1];
+                ei++;
+            }
+            // running = number of intervals covering cand
+            int s = (int) Math.min(running, Integer.MAX_VALUE); // safe cast; s <= n
+
+            int orig = count.getOrDefault(cand, 0);
+            int possible = Math.min(s, orig + numOperations);
+            ans = Math.max(ans, possible);
+        }
+
+        return ans;
+    }
+}
