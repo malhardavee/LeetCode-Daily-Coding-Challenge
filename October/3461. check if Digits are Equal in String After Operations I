@@ -1,0 +1,47 @@
+class Solution {
+    public boolean hasSameDigits(String s) {
+        int n = s.length();
+        int num1 = 0;
+        int num2 = 0;
+        int N = n - 2;
+        for (int i = 0; i <= N; ++i) {
+            int coeff = nCkMod10(N, i);
+            int d1 = s.charAt(i) - '0';
+            int d2 = s.charAt(i + 1) - '0';
+            num1 = (num1 + coeff * d1) % 10;
+            num2 = (num2 + coeff * d2) % 10;
+        }
+        return num1 == num2;
+    }
+
+    private int nCkMod10(int n, int k) {
+        int mod2 = lucas(n, k, 2);
+        int mod5 = lucas(n, k, 5);
+
+        int[][] lookup = {
+            {0, 6, 2, 8, 4},  
+            {5, 1, 7, 3, 9}   
+        };
+        return lookup[mod2][mod5];
+    }
+    private int lucas(int n, int k, int p) {
+        int res = 1;
+        while (n > 0 || k > 0) {
+            int ni = n % p;
+            int ki = k % p;
+            if (ki > ni) return 0;
+            res = (res * nCkSmall(ni, ki)) % p;
+            n /= p;
+            k /= p;
+        }
+        return res;
+    }
+    private int nCkSmall(int n, int k) {
+        if (k > n) return 0;
+        int res = 1;
+        for (int i = 1; i <= k; ++i) {
+            res = res * (n - k + i) / i;
+        }
+        return res;
+    }
+}
