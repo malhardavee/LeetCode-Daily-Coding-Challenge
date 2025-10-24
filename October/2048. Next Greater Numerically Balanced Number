@@ -1,0 +1,38 @@
+class Solution {
+    static List<Integer> balancedNumbers = new ArrayList<>();
+
+    static {
+        generateBalancedNumbers(0, new int[10], 0);
+        Collections.sort(balancedNumbers);
+    }
+
+    public int nextBeautifulNumber(int n) {
+        for (int num : balancedNumbers) {
+            if (num > n) return num;
+        }
+        return -1; // theoretically never happens for given constraints
+    }
+
+    private static void generateBalancedNumbers(int num, int[] count, int length) {
+        if (length > 7) return; // numbers longer than 7 digits are unnecessary
+
+        if (num > 0) {
+            boolean valid = true;
+            for (int d = 1; d <= 9; d++) {
+                if (count[d] != 0 && count[d] != d) {
+                    valid = false;
+                    break;
+                }
+            }
+            if (valid) balancedNumbers.add(num);
+        }
+
+        for (int d = 1; d <= 7; d++) {
+            if (count[d] < d) {
+                count[d]++;
+                generateBalancedNumbers(num * 10 + d, count, length + 1);
+                count[d]--;
+            }
+        }
+    }
+}
