@@ -1,0 +1,23 @@
+class Solution {
+    public int numberOfBeams(String[] bank) {
+        int totalBeams = 0;
+        int prevDevices = 0;
+
+        for (String row : bank) {
+            int currDevices = 0;
+
+            // Count devices ('1's) in current row
+            for (char c : row.toCharArray()) {
+                if (c == '1') currDevices++;
+            }
+
+            // If current row has devices, calculate beams with previous device row
+            if (currDevices > 0) {
+                totalBeams += prevDevices * currDevices;
+                prevDevices = currDevices; // Update previous device count
+            }
+        }
+
+        return totalBeams;
+    }
+}
