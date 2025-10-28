@@ -23,7 +23,6 @@ class Solution {
             // Step 4: add current element to leftSum for next iteration
             leftSum += nums[i];
         }
-
         return validWays;
     }
 }
