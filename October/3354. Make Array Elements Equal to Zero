@@ -1,0 +1,29 @@
+class Solution {
+    public int countValidSelections(int[] nums) {
+        int n = nums.length;
+        int totalSum = 0;
+        for (int x : nums) totalSum += x; // Step 1: find total sum
+
+        int leftSum = 0; // will keep sum of elements on left side
+        int validWays = 0;
+
+        // Step 2: iterate through each element
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 0) { // we can only start from zeros
+                int rightSum = totalSum - leftSum; // sum on right side (excluding this zero)
+
+                // Step 3: check balance condition
+                if (leftSum == rightSum) {
+                    validWays += 2; // both directions work
+                } else if (Math.abs(leftSum - rightSum) == 1) {
+                    validWays += 1; // only one direction works
+                }
+            }
+
+            // Step 4: add current element to leftSum for next iteration
+            leftSum += nums[i];
+        }
+
+        return validWays;
+    }
+}
