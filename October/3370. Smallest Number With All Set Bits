@@ -1,0 +1,10 @@
+class Solution {
+    public int smallestNumber(int n) {
+        int k = bitLength(n);
+        return (1 << k) - 1;
+    }
+
+    private int bitLength(int n) {
+        return Integer.SIZE - Integer.numberOfLeadingZeros(n);
+    }
+}
