@@ -6,7 +6,9 @@ All solutions in this repository are implemented in Java. The goal of this proje
 
 💡 Skills Highlighted
 	•	Data Structures & Algorithms (DSA): Practicing arrays, strings, linked lists, trees, graphs, dynamic programming, and more.
+	
 	•	Problem Solving: Enhancing logical thinking, analytical skills, and ability to tackle a wide variety of coding challenges efficiently.
+	
 	•	Java Programming: Writing clean, optimized, and well-structured code for different problem types.
 
 Feel free to explore the solutions, learn from them, or use them as reference for your own practice.
