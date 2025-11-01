@@ -1,0 +1,32 @@
+class Solution {
+    public ListNode modifiedList(int[] nums, ListNode head) {
+        Arrays.sort(nums); // sort once at the start
+
+        ListNode head1 = new ListNode(0);
+        ListNode temp = head1;
+
+        while (head != null) {
+            if (flag(nums, head)) {
+                head = head.next; // skip
+            } else {
+                temp.next = head; // keep
+                temp = temp.next;
+                head = head.next;
+            }
+        }
+
+        temp.next = null;
+        return head1.next;
+    }
+
+    public boolean flag(int[] nums, ListNode temp) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == temp.val) return true;
+            else if (nums[mid] < temp.val) left = mid + 1;
+            else right = mid - 1;
+        }
+        return false;
+    }
+}
