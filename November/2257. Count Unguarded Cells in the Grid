@@ -1,0 +1,64 @@
+class Solution {
+    public int countUnguarded(int m, int n, int[][] guards, int[][] walls) {
+        int[][] grid = new int[m][n];
+
+        // Mark guards = 1
+        for(int[] g : guards) {
+            grid[g[0]][g[1]] = 1;
+        }
+
+        // Mark walls = 2
+        for(int[] w : walls) {
+            grid[w[0]][w[1]] = 2;
+        }
+
+        boolean[][] visited = new boolean[m][n];
+
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j] == 1) { // Guard found
+
+                    // UP
+                    int r = i - 1, c = j;
+                    while(r >= 0 && grid[r][c] != 2 && grid[r][c] != 1) {
+                        visited[r][c] = true;
+                        r--;
+                    }
+
+                    // DOWN
+                    r = i + 1; c = j;
+                    while(r < m && grid[r][c] != 2 && grid[r][c] != 1) {
+                        visited[r][c] = true;
+                        r++;
+                    }
+
+                    // RIGHT
+                    r = i; c = j + 1;
+                    while(c < n && grid[r][c] != 2 && grid[r][c] != 1) {
+                        visited[r][c] = true;
+                        c++;
+                    }
+
+                    // LEFT
+                    r = i; c = j - 1;
+                    while(c >= 0 && grid[r][c] != 2 && grid[r][c] != 1) {
+                        visited[r][c] = true;
+                        c--;
+                    }
+                }
+            }
+        }
+
+        // Count unguarded cells
+        int count = 0;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j] == 0 && !visited[i][j]) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+}
